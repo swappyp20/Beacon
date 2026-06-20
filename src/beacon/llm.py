@@ -53,3 +53,17 @@ class LLM:
             messages=[{"role": "user", "content": need}],
         )
         return msg.content[0].text.strip().lower()
+
+    def synthesize_scorecard(self, handle: str, memory: list, followups: list) -> dict:
+        sys = ("Draft a STRENGTHS-FIRST youth scorecard across exactly these 5 domains: "
+               "School & learning; Social-emotional wellbeing; Basic needs / stability; "
+               "Goals & aspirations; Mentoring connection. For each, return "
+               "{status, strengths, concerns} where status is one of "
+               "Thriving|Steady|Needs attention|Unknown. Use Unknown when there is no "
+               "evidence. NO numbers, NO grades, NO ranking. Return a JSON object keyed by domain.")
+        payload = {"handle": handle, "memory": memory, "followups": followups}
+        msg = self.client.messages.create(
+            model=config.model_reason, max_tokens=700,
+            system=sys, messages=[{"role": "user", "content": json.dumps(payload)}],
+        )
+        return json.loads(msg.content[0].text)

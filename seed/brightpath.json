@@ -1,0 +1,29 @@
+{
+  "channels": ["general", "mentee-maya", "mentee-jordan", "safeguarding-leads"],
+  "messages": {
+    "mentee-maya": [
+      "Intro: Maya, 15, mentee since fall. Interested in college, nervous about money.",
+      "Maya was quiet at our last session, didn't say much about school.",
+      "Maya mentioned the college application fees are stressing her out.",
+      "Good session today — Maya opened up about wanting to study nursing.",
+      "Maya skipped our check-in this week, said she was tired.",
+      "Note: Maya's grades dropped slightly this term, mostly math.",
+      "Maya seemed more down than usual today, worth keeping an eye on.",
+      "Maya asked about free tutoring near the community center.",
+      "Follow-up: shared the CollegeBound prep info with Maya.",
+      "Maya said she felt better after we talked about a plan for fees."
+    ],
+    "mentee-jordan": [
+      "Intro: Jordan, 16, mentee since spring, into basketball and coding.",
+      "Jordan missed two sessions, reached out, he's been busy with a job.",
+      "Jordan is doing well, wants help with a resume for a summer internship.",
+      "Note: Jordan mentioned trouble sleeping, will check in next week.",
+      "Jordan asked about scholarships for a summer coding camp.",
+      "Good news: Jordan got the internship interview."
+    ],
+    "general": [
+      "Welcome to BrightPath Mentors! Use #safeguarding-leads for escalations.",
+      "Reminder: log every mentee session so we keep continuity."
+    ]
+  }
+}

@@ -127,6 +127,8 @@ def create_app() -> App:
 
 
 def main():
+    import truststore
+    truststore.inject_into_ssl()  # use the OS trust store (works behind TLS-inspecting proxies)
     SocketModeHandler(create_app(), config.app_token).start()
 
 

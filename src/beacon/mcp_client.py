@@ -1,4 +1,5 @@
 import asyncio
+import json
 from typing import Any
 
 
@@ -16,9 +17,20 @@ class KnowledgeClient:
 
     def _call(self, name: str, args: dict) -> Any:
         result = self._loop.run_until_complete(self.session.call_tool(name, args))
+        # Fake session (tests) hands back a plain dict; the real mcp SDK hands back
+        # a CallToolResult object.
         if isinstance(result, dict):
-            return result.get("structuredContent")
-        return getattr(result, "structuredContent", result)
+            sc = result.get("structuredContent", result)
+        else:
+            sc = getattr(result, "structuredContent", None)
+            if sc is None:
+                content = getattr(result, "content", None) or []
+                text = "".join(getattr(c, "text", "") for c in content)
+                sc = json.loads(text) if text else None
+        # FastMCP wraps non-object (and some object) returns under {"result": ...}.
+        if isinstance(sc, dict) and set(sc.keys()) == {"result"}:
+            sc = sc["result"]
+        return sc
 
     def get_protocol(self, severity: str) -> dict:
         return self._call("get_protocol", {"severity": severity}) or {}

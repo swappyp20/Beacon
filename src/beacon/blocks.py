@@ -39,3 +39,15 @@ def triage_card(r) -> list[dict]:
              "text": {"type": "plain_text", "text": "View protocol"},
              "action_id": "view_protocol", "value": r.protocol.get("id", "")}]},
     ]
+
+
+def resource_cards(resources: list[dict]) -> list[dict]:
+    if not resources:
+        return [_section("No vetted resources matched yet. I only surface vetted options.")]
+    blocks = [_section("*Vetted resources matched to the need:*")]
+    for r in resources:
+        blocks.append(_section(f"*{r['title']}*\n_Eligible:_ {r.get('eligibility', '—')} · :white_check_mark: vetted by {r.get('vetted_by', 'staff')}"))
+        blocks.append({"type": "actions", "elements": [
+            {"type": "button", "text": {"type": "plain_text", "text": "Get hand-off sheet"},
+             "action_id": "resource_handoff", "value": r["id"]}]})
+    return blocks

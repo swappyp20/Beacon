@@ -42,3 +42,14 @@ class LLM:
         )
         word = msg.content[0].text.strip().lower()
         return word if word in rubric else "elevated"
+
+    def categorize_need(self, need: str) -> str:
+        """Map a free-text need to a resource category keyword."""
+        msg = self.client.messages.create(
+            model=config.model_classify, max_tokens=10,
+            system=("Map a youth need to ONE category keyword from: "
+                    "college-cost, college-prep, crisis, food, housing, tutoring, jobs, health. "
+                    "Reply with the single keyword."),
+            messages=[{"role": "user", "content": need}],
+        )
+        return msg.content[0].text.strip().lower()

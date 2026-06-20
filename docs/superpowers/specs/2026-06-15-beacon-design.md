@@ -1,4 +1,4 @@
-# MentorOps — Design Spec
+# Beacon — Design Spec
 
 **Slack Agent Builder Challenge · Track: Slack Agent for Good**
 **Date:** 2026-06-15
@@ -8,14 +8,14 @@
 
 ## 1. Mission
 
-**MentorOps is a Slack agent for the adults who serve kids — the mentors and coordinators
+**Beacon is a Slack agent for the adults who serve kids — the mentors and coordinators
 at a youth mentoring nonprofit, not the children themselves.** These teams run on goodwill
 and are stretched thin. When a mentee is struggling — emotionally, academically, or with
 basic needs — the mentor's right response depends on knowing the org's protocols,
 remembering the mentee's history, and finding the right resource fast. That knowledge is
 scattered, and kids fall through the cracks.
 
-MentorOps is the mentor's co-pilot: it helps them respond faster and more completely to
+Beacon is the mentor's co-pilot: it helps them respond faster and more completely to
 whatever a mentee is facing — while keeping a licensed human in every sensitive loop.
 **The mentee never interacts with it. It does not talk to children, diagnose, or provide
 therapy.**
@@ -24,12 +24,12 @@ therapy.**
 
 | Actor | On Slack? | Role |
 |---|---|---|
-| **Mentor** | Yes | Talks to MentorOps about a mentee; the primary user |
+| **Mentor** | Yes | Talks to Beacon about a mentee; the primary user |
 | **Coordinator / safeguarding lead** | Yes | Receives escalations; owns sensitive decisions |
 | **Mentee (child)** | **No** | The *subject* of the conversation — never a participant |
 
 **Delivery model (the "last mile"):** value reaches the mentee through the mentor, never
-from the agent. `MentorOps → mentor (on Slack) → real-life mentoring → mentee`. The agent
+from the agent. `Beacon → mentor (on Slack) → real-life mentoring → mentee`. The agent
 produces hand-offs the mentor delivers; it sends nothing to a child or family directly.
 
 ---
@@ -40,7 +40,7 @@ produces hand-offs the mentor delivers; it sends nothing to a child or family di
 
 **Eligible technologies used (all three):**
 
-| Technology | How MentorOps uses it |
+| Technology | How Beacon uses it |
 |---|---|
 | **Slack AI capabilities** | The agent itself: Bolt for Python + `Assistant` class + Claude reasoning, with streaming responses and suggested prompts. |
 | **MCP server integration** | A **custom Python MCP server (built by us)** exposing the org's *non-Slack* knowledge — `safeguarding_protocols`, `resource_directory`, `past_proposals` — consumed by the Bolt agent. **Distinct from Slack's MCP server:** Slack's serves Slack *content* and targets external agents; our first-party Bolt app already has native Slack Web API access, so it does **not** consume Slack's MCP server (that would be redundant). Building our own is what earns the "MCP server integration" technology. |
@@ -55,9 +55,9 @@ produces hand-offs the mentor delivers; it sends nothing to a child or family di
 ## Clarifications
 
 ### Session 2026-06-15
-- Q: What does MentorOps persist about a child outside Slack (in SQLite)? → A: Only a pseudonymous handle + internal ID; the child's real identifying details stay inside Slack (restricted channel/Canvas) and are never duplicated to local storage.
+- Q: What does Beacon persist about a child outside Slack (in SQLite)? → A: Only a pseudonymous handle + internal ID; the child's real identifying details stay inside Slack (restricted channel/Canvas) and are never duplicated to local storage.
 - Q: Which Slack data should RTS "institutional memory" queries search? → A: Mentee-specific channels + safeguarding channels the agent is a member of — not the whole workspace.
-- Q: How does MentorOps determine user roles and enforce access? → A: From Slack-native primitives — user groups (e.g., `@safeguarding-leads`) + restricted-channel membership; no separate roles store.
+- Q: How does Beacon determine user roles and enforce access? → A: From Slack-native primitives — user groups (e.g., `@safeguarding-leads`) + restricted-channel membership; no separate roles store.
 - Q: Where do the triage severity thresholds (routine/elevated/urgent/crisis) come from? → A: Sourced from the org's safeguarding protocol via the custom MCP server, with a built-in default rubric as fallback.
 - Q: How is an imminent-harm crisis detected for the fast-path? → A: Two-stage, fail-safe — a deterministic keyword/pattern pre-filter OR an LLM classifier; either firing activates the fast-path (biased toward false positives).
 
@@ -66,9 +66,9 @@ produces hand-offs the mentor delivers; it sends nothing to a child or family di
 ## 3. Users & personas
 
 - **Mentor** (primary) — a volunteer who meets a mentee regularly, logs notes, and raises
-  concerns. **Talks to MentorOps DM-first** (private, the natural post-session moment).
+  concerns. **Talks to Beacon DM-first** (private, the natural post-session moment).
 - **Program coordinator** — staff who owns escalations, follow-ups, and reporting.
-- **Safeguarding lead** — the named human MentorOps routes serious wellbeing concerns to.
+- **Safeguarding lead** — the named human Beacon routes serious wellbeing concerns to.
 - **Executive director / board** (Pillar 5) — consumes impact reports.
 
 **Out of scope as users:** children/mentees themselves, and parents/guardians.
@@ -86,7 +86,7 @@ produces hand-offs the mentor delivers; it sends nothing to a child or family di
                                          │ events (assistant_thread_started,
                                          │ message.im), chat.*Stream
                           ┌──────────────▼───────────────┐
-                          │   MentorOps agent (Bolt/Py)   │
+                          │   Beacon agent (Bolt/Py)   │
                           │   Assistant response loop      │
                           │   • intent router              │
                           │   • safety guardrails          │
@@ -120,7 +120,7 @@ produces hand-offs the mentor delivers; it sends nothing to a child or family di
 
 ### 4.1 Presentation layer (UX surfaces)
 
-**MentorOps has no separate web frontend — Slack *is* the UI.** The Python backend renders
+**Beacon has no separate web frontend — Slack *is* the UI.** The Python backend renders
 every surface through Slack's native APIs, which gives us a polished, accessible,
 cross-platform interface for free. Four surfaces:
 
@@ -151,7 +151,7 @@ Designed as the full vision; implemented behind a **demo cut line** (Section 7).
 ### Pillar 1 — Wellbeing triage & safeguarding *(differentiator)*
 
 **Entry point — mentor-initiated, DM-first.** The agent never messages first. The workflow
-begins when a mentor opens a **DM with MentorOps** and describes a concern in free text
+begins when a mentor opens a **DM with Beacon** and describes a concern in free text
 (e.g., just after a session). The "triage message" is the agent's structured *reply* (step 6
 below), not an unprompted alert.
 
@@ -221,7 +221,7 @@ Canvas. **Not a grade, not a rank, never a number.**
 
 ## 6. Safety & privacy model
 
-The feature that separates this from a hackathon toy. Because MentorOps touches minors'
+The feature that separates this from a hackathon toy. Because Beacon touches minors'
 sensitive data:
 
 - **Human-in-the-loop guarantee** — for any wellbeing concern the agent may only assess
@@ -260,7 +260,7 @@ We design all six pillars but implement in strict priority order:
 | **Then** | **3** | Cheap to add, huge operational credibility ("nothing falls through the cracks"). |
 | **Upside** | **4 + 5 + 6** | Funding sustainability, board reporting, and the mentee scorecard. Pillar 6 depends on Pillar 3's logged data but is the **most demo-friendly upside item** — a strong closing beat. |
 
-If only pillars 1–2 ship, MentorOps is still a complete, demo-able, award-worthy agent.
+If only pillars 1–2 ship, Beacon is still a complete, demo-able, award-worthy agent.
 
 ---
 
@@ -303,7 +303,7 @@ Seed a fictional nonprofit, **"BrightPath Mentors"**, with:
 - A handful of mentees with prior Slack history so **RTS has real institutional memory to
   find**.
 
-**Demo narrative (golden path):** A mentor messages MentorOps about Maya (15) —
+**Demo narrative (golden path):** A mentor messages Beacon about Maya (15) —
 college-app stress, can't afford fees, "seemed really down today." The agent:
 1. Detects a wellbeing signal → triages as *elevated*, surfaces BrightPath's check-in
    protocol (MCP), pulls Maya's past notes (RTS), routes to `#safeguarding-leads`,
@@ -362,8 +362,8 @@ Source: office-hours review against the real rules at https://slackhack.devpost.
   `slackhack@salesforce.com` and `testing@devpost.com`. Track: **Slack Agent for Good**.
 - **Judges run the sandbox themselves.** It must survive poking, not just demo on rails.
 
-### Judging criteria (four, equal/unweighted) + how MentorOps wins each
-| Criterion | Bonus prize | MentorOps play |
+### Judging criteria (four, equal/unweighted) + how Beacon wins each
+| Criterion | Bonus prize | Beacon play |
 |---|---|---|
 | Technological Implementation | Best Tech Impl ($2k) | Real (small) MCP server + real RTS wiring + clean code. Stub minimally; judges run it. |
 | Design / UX | **Best UX ($2k)** | Polished Block Kit (triage card, resource cards), Canvas scorecard, App Home. UX is 1/4 of score — not optional. |
@@ -393,7 +393,7 @@ Source: office-hours review against the real rules at https://slackhack.devpost.
 
 ### ~3-minute video script (the golden path is the script)
 1. (0:00) The problem in one line: stretched mentors, kids fall through cracks.
-2. (0:20) Mentor DMs MentorOps the messy Maya concern → triage card (urgency + protocol via
+2. (0:20) Mentor DMs Beacon the messy Maya concern → triage card (urgency + protocol via
    MCP + past note via RTS) → route to `#safeguarding-leads`.
 3. (1:20) Resource navigator: vetted matches + plain-language hand-off + logged.
 4. (2:00) Scorecard Canvas closer (strengths-based, no numbers).

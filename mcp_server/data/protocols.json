@@ -1,0 +1,26 @@
+[
+  {
+    "id": "checkin-elevated",
+    "trigger": "wellbeing concern, non-crisis (low mood, withdrawal, stress)",
+    "severity": "elevated",
+    "steps": [
+      "Acknowledge the mentor's observation; do not diagnose.",
+      "Log a dated follow-up for this mentee.",
+      "Notify the on-call safeguarding lead in #safeguarding-leads within 24h."
+    ],
+    "escalation_target": "#safeguarding-leads",
+    "references": ["BrightPath Safeguarding Handbook s.3"]
+  },
+  {
+    "id": "crisis-imminent-harm",
+    "trigger": "imminent harm: self-harm, suicide, abuse disclosure, immediate danger",
+    "severity": "crisis",
+    "steps": [
+      "Do NOT counsel. Surface the crisis protocol immediately.",
+      "@mention the on-call safeguarding lead now in #safeguarding-leads.",
+      "Provide the crisis line and remind the mentor Beacon is not a crisis service."
+    ],
+    "escalation_target": "#safeguarding-leads",
+    "references": ["BrightPath Safeguarding Handbook s.1 (Emergencies)"]
+  }
+]

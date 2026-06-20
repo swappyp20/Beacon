@@ -219,3 +219,6 @@ __marimo__/
 
 # MentorOps: visual-companion brainstorm mockups (local-only)
 .superpowers/
+
+# Local Claude Code settings (personal, not committed)
+.claude/settings.local.json

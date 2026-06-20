@@ -1,0 +1,5 @@
+[
+  {"id": "nacac-fee-waiver", "category": "college-cost", "title": "NACAC College Application Fee Waiver", "eligibility": "income-qualified juniors/seniors", "how_to_access": "Counselor submits the NACAC form; fee waived at participating colleges.", "vetted_by": "BrightPath staff"},
+  {"id": "collegebound-prep", "category": "college-prep", "title": "CollegeBound Free Prep (Saturdays)", "eligibility": "any local high-schooler", "how_to_access": "Walk-in at the community center, 10am Saturdays.", "vetted_by": "BrightPath staff"},
+  {"id": "teen-crisis-line", "category": "crisis", "title": "Local Teen Crisis & Text Line", "eligibility": "anyone", "how_to_access": "Call or text 988; local line 555-0123.", "vetted_by": "BrightPath staff"}
+]

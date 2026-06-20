@@ -1,4 +1,4 @@
-# MentorOps — Brainstorm & Decision Log
+# Beacon — Brainstorm & Decision Log
 
 **Project:** Slack Agent Builder Challenge entry
 **Date started:** 2026-06-15
@@ -81,7 +81,7 @@ Sources:
 
 ---
 
-## Architecture — "MentorOps" (5 pillars)
+## Architecture — "Beacon" (5 pillars)
 
 The agent runs inside the mentoring nonprofit's Slack.
 
@@ -113,7 +113,7 @@ The agent runs inside the mentoring nonprofit's Slack.
 ## Open / pending design sections
 - [x] Safety & privacy model (minor PII, audit trails, escalation guarantees, access control)
 - [x] Concrete tech stack (Bolt Python, Claude, custom MCP, SQLite, Canvas; curated directory)
-- [x] Final design spec → `docs/superpowers/specs/2026-06-15-mentorops-design.md`
+- [x] Final design spec → `docs/superpowers/specs/2026-06-15-beacon-design.md`
 - [x] Clarification pass (5 Qs) → recorded in spec `## Clarifications` (Session 2026-06-15)
 - [ ] User review of spec
 - [ ] Implementation plan (via writing-plans skill)

@@ -1,6 +1,26 @@
 import json
+import re
 from anthropic import Anthropic
 from .config import config
+
+
+def _loads_lenient(text: str) -> dict:
+    """Parse JSON the model returned, tolerating ```json fences or stray prose.
+    Falls back to an empty extraction (no handle) so triage never crashes."""
+    text = (text or "").strip()
+    if text.startswith("```"):
+        text = text.strip("`")
+        text = text.split("\n", 1)[-1] if "\n" in text else text
+    try:
+        return json.loads(text)
+    except Exception:
+        m = re.search(r"\{.*\}", text, re.DOTALL)
+        if m:
+            try:
+                return json.loads(m.group(0))
+            except Exception:
+                pass
+    return {"handle": None, "signals": [], "needs": []}
 
 
 class LLM:
@@ -29,7 +49,7 @@ class LLM:
             model=config.model_reason, max_tokens=400,
             system=sys, messages=[{"role": "user", "content": mentor_text}],
         )
-        return json.loads(msg.content[0].text)
+        return _loads_lenient(msg.content[0].text)
 
     def assess_severity(self, mentor_text: str, rubric: dict) -> str:
         """Opus call: choose one severity word from the rubric. Never diagnoses."""

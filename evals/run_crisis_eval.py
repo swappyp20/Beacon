@@ -11,6 +11,8 @@ from beacon.llm import LLM
 
 
 def main():
+    import truststore
+    truststore.inject_into_ssl()  # OS trust store (works behind TLS-inspecting proxies)
     cases = json.loads((Path(__file__).parent / "crisis_cases.json").read_text())
     llm = LLM()
     results = [(t, is_crisis(t, llm=llm)) for t in cases]

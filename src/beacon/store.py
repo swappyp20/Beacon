@@ -50,7 +50,9 @@ class Store:
 
     @classmethod
     def open(cls, path: str) -> "Store":
-        return cls(sqlite3.connect(path))
+        # check_same_thread=False: Bolt dispatches handlers on worker threads, so the
+        # connection must be usable across threads (SQLite runs in serialized mode).
+        return cls(sqlite3.connect(path, check_same_thread=False))
 
     def add_mentee(self, handle: str, mentor: str, channel: str, canvas_id: Optional[str] = None) -> int:
         cur = self.conn.execute(
